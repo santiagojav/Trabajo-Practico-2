@@ -1,4 +1,4 @@
-Este programa lee dos archivos binarios con datos de todas las operaciones 
+Este programa lee un archivos binarios con datos de todas las operaciones 
 realizadas en un dia por un broker financiero.
 Transforma los datos brutos de las transacciones en un análisis estructurado 
 que permite a la broker evaluar el rendimiento por tipo de liquidación (Plazo)
