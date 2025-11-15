@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cassert> 
+#include <fstream> 
 #include "listas.hpp"
 #include "rwstring.hpp"
 
@@ -34,6 +34,7 @@ struct Plazo{
     Nodo<Bolsa> *lbolsa = nullptr; 
 };
 
+//lectura
 fstream& operator >> (fstream &fs, Registro& reg){
     reg.accion = readstring(fs, laccion);
     reg.bolsa = readstring(fs, lbolsa); 
@@ -45,12 +46,41 @@ fstream& operator >> (fstream &fs, Registro& reg){
 	return fs;
 }
 
-int criterioPlazo(const Plazo& a, const Plazo& b){
+// sobrecarga
+ostream& operator(ostream &os, const Operacion& op){
+    os << (op.cantidad > 0 ? "Venta" : "Compra")
+       << op.accion << "\t" << op.cantidad << "\t" << op.precio;
+    return os; 
+}
+ostream& operator(ostream &os, const Bolsa& bolsa){
+    os << bolsa.nombre << "\t" << bolsa.montoTotal;
+    return os;
+}
+ostream& operator(ostream &os, const Plazo& plazo){
+    os << "Plazo: " << plazo.codigo << "\n"
+       << "Ventas: " << plazo.cantVentas << "\n"
+       << "Compras: " << plazo.cantCompras << "\n"
+    return os; 
+}
+
+
+bool criterioPlazo(const Plazo& a, const Plazo& b){
     return a.codigo.compare(b.codigo);
 }
 
-int criterioBolsa(const Bolsa& a, const Bolsa& b){
+bool criterioBolsa(const Bolsa& a, const Bolsa& b){
     return a.nombre.compare(b.nombre); 
+}
+
+void iniciarPlazos(Nodo<Plazo>* &lplazo){
+        for(int i = 0; i < 4; i++){ 
+            plazo.codigo = i; 
+            insertarOrdenado(plazo, lplazo, criterioPlazo);
+        }
+}
+
+void listaPrincipal(Nodo<Plazo> *lplazo){
+
 }
 
 int main(){
@@ -69,14 +99,9 @@ int main(){
     Operacion op; 
     Bolsa bolsa; 
     Plazo plazo; 
-    Registro. reg; 
+    Registro reg; 
 
-    void iniciarPlazos(Nodo<Plazo>* &lplazo){
-        for(int i = 0; i < 4; i++){ 
-            plazo.codigo = i; 
-            insertarOrdenado(plazo, lista, criterioPlazo);
-        }
-    }
+    iniciarPlazos(lplazo);
 
     while (arch >> reg){
         plazo.codigo = reg.codigo;
@@ -102,6 +127,9 @@ int main(){
         op.precio = reg.precio;
         agregar(op, bp->dato.lop);
     }
+    arch.close();
+
+    listaPrincipal(lplazo);
 
     return 0; 
 }
