@@ -93,41 +93,39 @@ void iniciarPlazos(Nodo<Plazo>* &lplazo){
 }
 
 void listaPrincipal(Nodo<Plazo> *lplazo){
-Nodo<Plazo>* pp = lplazo;
+    Nodo<Plazo>* pp = lplazo;
 
     while(pp){
-    cout << "Plazo: " << pp->dato.codigo << "  Compras: " 
-         << pp->dato.cantCompras << "  Ventas: " << pp->dato.cantVentas << "\n\n";
+        cout << "Plazo: " << pp->dato.codigo << "  Compras: " 
+            << pp->dato.cantCompras << "  Ventas: " << pp->dato.cantVentas << "\n\n";
 
-    Nodo<Bolsa>* bp = pp->dato.lbolsa;
+        Nodo<Bolsa>* bp = pp->dato.lbolsa;
+    
+        while (bp) {
+            cout << bp->dato.nombre << "\t" << bp->dato.montoTotal << "\n";
 
-    while (bp) {
-        cout << bp->dato.nombre << "\t" << bp->dato.montoTotal << "\n";
+            Nodo<Operacion>* op = bp->dato.loperacion;
 
-        Nodo<Operacion>* op = bp->dato.loperacion;
+            if(op){
+                // imprimir solo si hay operaciones
+                cout << "Acción "<<"\t"<<"Plazo Bolsa"<<"\t"<<"Pre.Un."<<"\t"<<"Cant.\n";
+            }
 
-        if(op){
-            // imprimir solo si hay operaciones
-            cout << "Acción <<"\t"<<"Plazo Bolsa"<<"\t"<<"Pre.Un."<<"\t"<<"Cant.\n";
+            while (op) {
+                cout << (op->dato.cantidad > 0 ? "Venta " : "Compra ") 
+                        << op->dato.accion << "\t"
+                        << nombrePlazo(pp->dato.codigo) << "\t"
+                        << bp->dato.nombre << "\t"
+                        << op->dato.precio << "\t"
+                        << op->dato.cantidad << "\n";
+                    op = op->sig;
+            }
+            cout << "\n"; // espacio entre bolsas
+            bp = bp->sig;
         }
-
-        while (op) {
-            cout << (op->dato.cantidad > 0 ? "Venta " : "Compra ") 
-                     << op->dato.accion << "\t"
-                     << nombrePlazo(pp->dato.codigo) << "\t"
-                     << bp->dato.nombre << "\t"
-                     << op->dato.precio << "\t"
-                     << op->dato.cantidad << "\n";
-                op = op->sig;
-        }
-
-        cout << "\n"; // espacio entre bolsas
-        bp = bp->sig;
+        cout << "\n"; // espacio entre plazos
+        pp = pp->sig;
     }
-
-    cout << "\n"; // espacio entre plazos
-    pp = pp->sig;
-}
 }
 
 int main(){
